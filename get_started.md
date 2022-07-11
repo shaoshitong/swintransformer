@@ -260,3 +260,6 @@ python -m torch.distributed.launch --nproc_per_node 8 --nnode=4 \
 ```
 
 More Swin-MoE models can be found in [MODEL HUB](MODELHUB.md#imagenet-22k-pretrained-swin-moe-models)
+
+
+CIFAR-100:  python -m torch.distributed.launch --nproc_per_node 1 --master_port 12345  main_cifar100.py --cfg configs/swinv2/swinv2_tiny_patch4_window8_256.yaml --data-path /data/data --batch-size 32

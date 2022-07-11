@@ -10,6 +10,8 @@ import torch
 import numpy as np
 import torch.distributed as dist
 from torchvision import datasets, transforms
+from torchvision.datasets import CIFAR10,CIFAR100
+
 from timm.data.constants import IMAGENET_DEFAULT_MEAN, IMAGENET_DEFAULT_STD
 from timm.data import Mixup
 from timm.data import create_transform
@@ -17,6 +19,7 @@ from timm.data import create_transform
 from .cached_image_folder import CachedImageFolder
 from .imagenet22k_dataset import IN22KDATASET
 from .samplers import SubsetRandomSampler
+
 
 try:
     from torchvision.transforms import InterpolationMode
@@ -116,6 +119,26 @@ def build_dataset(is_train, config):
             ann_file = prefix + "_map_val.txt"
         dataset = IN22KDATASET(config.DATA.DATA_PATH, ann_file, transform)
         nb_classes = 21841
+    elif config.DATA.DATASET == 'cifar100':
+        root = config.DATA.DATA_PATH
+        if is_train:
+            cifar_transform=transforms.Compose([
+                transforms.RandomResizedCrop(size=(256, 256),scale=(0.08, 1.0),ratio=(3.0 / 4.0, 4.0 / 3.0),interpolation=InterpolationMode.BICUBIC),
+                transforms.RandomHorizontalFlip(),
+                transforms.ToTensor(),
+                transforms.Normalize(mean=(0.5070751592371323, 0.48654887331495095, 0.4409178433670343),std=(0.2673342858792401, 0.2564384629170883, 0.27615047132568404))
+            ])
+        else:
+            cifar_transform=transforms.Compose([
+                transforms.Resize(256,interpolation=InterpolationMode.BICUBIC),
+                transforms.CenterCrop(256),
+                transforms.ToTensor(),
+                transforms.Normalize(mean=(0.5070751592371323, 0.48654887331495095, 0.4409178433670343),
+                                     std=(0.2673342858792401, 0.2564384629170883, 0.27615047132568404))
+            ])
+        dataset=CIFAR10(root,train=is_train,transform=cifar_transform,download=True)
+        nb_classes=100
+
     else:
         raise NotImplementedError("We only support ImageNet Now.")
 

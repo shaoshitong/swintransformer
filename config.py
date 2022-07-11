@@ -19,13 +19,13 @@ _C.BASE = ['']
 # -----------------------------------------------------------------------------
 _C.DATA = CN()
 # Batch size for a single GPU, could be overwritten by command line argument
-_C.DATA.BATCH_SIZE = 128
+_C.DATA.BATCH_SIZE = 32
 # Path to dataset, could be overwritten by command line argument
-_C.DATA.DATA_PATH = ''
+_C.DATA.DATA_PATH = '/data/data/'
 # Dataset name
-_C.DATA.DATASET = 'imagenet'
+_C.DATA.DATASET = 'cifar100'
 # Input image size
-_C.DATA.IMG_SIZE = 224
+_C.DATA.IMG_SIZE = 256
 # Interpolation to resize image (random, bilinear, bicubic)
 _C.DATA.INTERPOLATION = 'bicubic'
 # Use zipped dataset instead of folder dataset
@@ -43,16 +43,16 @@ _C.DATA.NUM_WORKERS = 8
 # -----------------------------------------------------------------------------
 _C.MODEL = CN()
 # Model type
-_C.MODEL.TYPE = 'swin'
+_C.MODEL.TYPE = 'swinv2'
 # Model name
-_C.MODEL.NAME = 'swin_tiny_patch4_window7_224'
+_C.MODEL.NAME = 'swinv2_tiny_patch4_window8_256'
 # Pretrained weight from checkpoint, could be imagenet22k pretrained weight
 # could be overwritten by command line argument
 _C.MODEL.PRETRAINED = ''
 # Checkpoint to resume, could be overwritten by command line argument
 _C.MODEL.RESUME = ''
 # Number of classes, overwritten in data preparation
-_C.MODEL.NUM_CLASSES = 1000
+_C.MODEL.NUM_CLASSES = 100
 # Dropout rate
 _C.MODEL.DROP_RATE = 0.0
 # Drop path rate
@@ -177,6 +177,15 @@ _C.TRAIN.MOE.SAVE_MASTER = False
 # -----------------------------------------------------------------------------
 # Augmentation settings
 # -----------------------------------------------------------------------------
+"""
+    mixup_alpha=0.8,-
+    cutmix_alpha=1.0,-
+    prob=1.0,-
+    switch_prob=0.5,-
+    mode="batch",-
+    num_classes=100,-
+
+"""
 _C.AUG = CN()
 # Color jitter factor
 _C.AUG.COLOR_JITTER = 0.4
