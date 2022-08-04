@@ -88,7 +88,7 @@ def main(config):
 
     model.cuda()
     model_without_ddp = model
-
+    torch.save(model.state_dict(),"pytorch_swinv2.pth")
     optimizer = build_optimizer(config, model)
     model = torch.nn.parallel.DistributedDataParallel(model, device_ids=[config.LOCAL_RANK], broadcast_buffers=False)
     loss_scaler = NativeScalerWithGradNormCount()
